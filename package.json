@@ -1,0 +1,9 @@
+{
+  "name": "cicd-nodejs-simples",
+  "version": "1.0.0",
+  "description": "Exemplo de CI/CD real com Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.test.js"
+  }
+}
