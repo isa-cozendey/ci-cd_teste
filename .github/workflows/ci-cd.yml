@@ -1,0 +1,47 @@
+name: Pipeline CI/CD Real
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    # Matriz para testar o código em múltiplas versões do Node.js simultaneamente
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm' # Ativa o cache para acelerar execuções futuras
+
+    - name: Instalar dependências
+      run: npm install
+
+    - name: Executar Testes Automatizados
+      run: npm test
+
+  deploy:
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    - name: Simular Deploy em Produção
+      run: |
+        echo "Autenticando no servidor..."
+        echo "Enviando arquivos atualizados..."
+        echo "Aplicação atualizada com sucesso em produção! 🚀"
